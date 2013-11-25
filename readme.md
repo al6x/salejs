@@ -1,12 +1,11 @@
 Cart Widget that can be embedded into sites in order to allow its users to
 buy products and send orders to the site owner.
 
-[Step by step explanation](http://jslang.info/projects/salejs) how project has been built.
+## Project history
 
-## Steps
-
-There's a git tag for every step, use it to see state of project for every step - type
-`git checkout <tag-name>` and `git checkout master` to set project to the latest state.
+Detailed [explanation](http://jslang.info/projects/salejs) of every step in the history
+of the project. Also, there's a git tag for every step - type `git checkout <tag-name>`
+and `git checkout master` to set project to the latest state.
 
 - HTML Mockups - `html-mockups`.
 
