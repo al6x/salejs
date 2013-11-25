@@ -43,6 +43,71 @@
       </div>
     </div>
 
+    <div class="bootstrap">
+    </div>
+
+    <textarea id="cart-with-items-template" style="display: none;">
+      <div class="cart">
+        <div class="cart-items">
+          <div class="cart-item">
+            <div class="cart-item-name">Nice Boots</div>
+            <div class="cart-item-remove">&times;</div>
+            <input class="cart-item-quantity form-control" type="text" value="1">
+            <div class="cart-item-multiply-sign">&times;</div>
+            <div class="cart-item-price">$10</div>
+            <div class="cart-clearfix"></div>
+          </div>
+          <div class="cart-item">
+            <div class="cart-item-name">Super ultra mega pro level Black Hat</div>
+            <div class="cart-item-remove">&times;</div>
+            <input class="cart-item-quantity form-control" type="text" value="33">
+            <div class="cart-item-multiply-sign">&times;</div>
+            <div class="cart-item-price">$10</div>
+            <div class="cart-clearfix"></div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary cart-purchase-button">
+          <span class="cart-purchase-button-label">Purchase</span>
+          <span class="cart-purchase-button-currency"></span>
+          <span class="cart-purchase-button-price">$20</span>
+        </button>
+      </div>
+    </textarea>
+
+    <textarea id="cart-contact-form-template" style="display: none;">
+      <div class="cart">
+        <form role="form">
+          <div class="form-group has-error">
+            <label for="cart-phone">Your phone</label>
+            <input type="phone" name="phone" class="form-control" id="cart-phone" placeholder="Enter phone" required>
+          </div>
+          <div class="form-group">
+            <label for="cart-email">Your email</label>
+            <input type="email" name="email" class="form-control" id="cart-email" placeholder="Enter email" required>
+          </div>
+        </form>
+        <button type="button" class="btn btn-primary cart-purchase-button">
+          <span class="cart-purchase-button-label">Purchase</span>
+          <span class="cart-purchase-button-currency"></span>
+          <span class="cart-purchase-button-price">$20</span>
+        </button>
+      </div>
+    </textarea>
+
+    <textarea id="cart-message-template" style="display: none;">
+      <div class="cart">
+        <div class="cart-message">You haven't purchased any products yet.</div>
+      </div>
+    </textarea>
+
+    <link rel="stylesheet" href="../vendor/bootstrap-3.0.2/css/bootstrap-widget.css" type="text/css">
+    <link rel="stylesheet" href="cart.css" type="text/css">
+    <script src="../vendor/jquery-1.10.2.js"></script>
+    <script src="../vendor/underscore-1.5.2.js"></script>
+    <script src="../vendor/bootstrap-3.0.2/js/bootstrap.js"></script>
+    <script src="cart.js"></script>
+    <script>$(function(){salejs.initialize()})</script>
+
     <!-- Live CSS Reload. -->
     <script>
       setInterval(function(){
