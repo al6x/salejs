@@ -1,0 +1,11 @@
+*~
+.DS_Store
+Thumbs.db
+tmp
+tmp.*
+node_modules
+build
+/production
+/log
+/data
+/github
