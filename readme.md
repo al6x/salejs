@@ -1,6 +1,15 @@
 Cart Widget that can be embedded into sites in order to allow its users to
 buy products and send orders to the site owner.
 
+[Step by step explanation](http://jslang.info/projects/salejs) how project has been built.
+
+## Steps
+
+There's a git tag for every step, use it to see state of project for every step - type
+`git checkout <tag-name>` and `git checkout master` to set project to the latest state.
+
+- HTML Mockups - `html-mockups`.
+
 ## How to install NodeJS
 
 We need it to use LESS, and as our web server.
@@ -42,3 +51,5 @@ lessc bootstrap-widget.less > bootstrap-widget.css
 
 You should get file `bootstrap-widget.css` with all bootstrap styles put under
 the `bootstrap` namespace.
+
+Copyright (c) Alexey Petrushin, http://petrush.in, released under the MIT license.
