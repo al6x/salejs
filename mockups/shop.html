@@ -42,5 +42,19 @@
         </div>
       </div>
     </div>
+
+    <!-- Live CSS Reload. -->
+    <script>
+      setInterval(function(){
+        var links = document.querySelectorAll('link')
+        // Updating only the last style, if you need to update all styles remove line below.
+        links = [links[links.length - 1]]
+        for(var i = 0; i < links.length; i++){
+          var link = links[i]
+          var href = link.getAttribute('href').split('#')[0]
+          link.setAttribute('href', href + '#' + Math.random())
+        }
+      }, 1000)
+    </script>
   </body>
 </html>
