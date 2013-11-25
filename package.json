@@ -1,0 +1,13 @@
+{
+  "name"         : "sales",
+  "main"         : "./client/cart.js",
+  "version"      : "0.0.1",
+  "homepage"     : "https://github.com/alexeypetrushin/salejs",
+  "description"  : "Cart Widget turning any Site into Shop ",
+  "keywords"     : ["Cart", "eCommerce", "Sales", "Store"],
+  "author"       : {
+    "name" : "Alexey Petrushin",
+    "url"  : "http://petrush.in"
+  },
+  "license"      : "MIT"
+}
