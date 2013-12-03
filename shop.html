@@ -1,5 +1,6 @@
 <html>
   <head>
+    <meta charset="utf-8">
     <link rel="stylesheet" href="http://localhost:3000/v1/vendor/purecss-0.3.0.css">
     <link rel="stylesheet" href="shop/shop.css">
   </head>
@@ -45,61 +46,6 @@
 
     <div class="bootstrap-widget">
     </div>
-
-    <textarea id="cart-with-items-template" style="display: none;">
-      <div class="cart">
-        <div class="cart-items">
-          <div class="cart-item">
-            <div class="cart-item-name">Nice Boots</div>
-            <a class="cart-item-remove">&times;</a>
-            <input class="cart-item-quantity form-control" type="text" value="1">
-            <div class="cart-item-multiply-sign">&times;</div>
-            <div class="cart-item-price">$10</div>
-            <div class="cart-clearfix"></div>
-          </div>
-          <div class="cart-item">
-            <div class="cart-item-name">Super ultra mega pro level Black Hat</div>
-            <a class="cart-item-remove">&times;</a>
-            <input class="cart-item-quantity form-control" type="text" value="33">
-            <div class="cart-item-multiply-sign">&times;</div>
-            <div class="cart-item-price">$10</div>
-            <div class="cart-clearfix"></div>
-          </div>
-        </div>
-        <button type="button" class="btn btn-primary cart-purchase-button">
-          <span class="cart-purchase-button-label">Purchase</span>
-          <span class="cart-purchase-button-currency"></span>
-          <span class="cart-purchase-button-price">$20</span>
-        </button>
-      </div>
-    </textarea>
-
-    <textarea id="cart-contact-form-template" style="display: none;">
-      <div class="cart">
-        <form role="form">
-          <div class="form-group has-error">
-            <label class="control-label" for="cart-phone">Your phone</label>
-            <input type="phone" name="phone" class="form-control" id="cart-phone" placeholder="Enter phone" required>
-            <span class="help-block">Invalid phone number.</span>
-          </div>
-          <div class="form-group has-success">
-            <label class="control-label" for="cart-email">Your email</label>
-            <input type="email" name="email" class="form-control" id="cart-email" placeholder="Enter email" required>
-          </div>
-        </form>
-        <button type="button" class="btn btn-primary cart-purchase-button">
-          <span class="cart-purchase-button-label">Purchase</span>
-          <span class="cart-purchase-button-currency"></span>
-          <span class="cart-purchase-button-price">$20</span>
-        </button>
-      </div>
-    </textarea>
-
-    <textarea id="cart-message-template" style="display: none;">
-      <div class="cart">
-        <div class="cart-message">You haven't purchased any products yet.</div>
-      </div>
-    </textarea>
 
     <script src="http://localhost:3000/v1/cart.js"></script>
     <script>
