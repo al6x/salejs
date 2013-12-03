@@ -1,4 +1,4 @@
-.bootstrap .popover {
+.bootstrap-widget .popover {
   box-shadow: 0 2px 15px hsla(0, 0%, 0%, 0.7);
   max-width: inherit;}
 
@@ -65,5 +65,5 @@
 /* Helpers. */
 .cart-clearfix {clear: both;}
 
-.bootstrap .popover {margin-left: -80px !important;}
-.bootstrap .popover.bottom .arrow {left: 208px;}
+.bootstrap-widget .popover {margin-left: -80px !important;}
+.bootstrap-widget .popover.bottom .arrow {left: 208px;}

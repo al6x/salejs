@@ -1,6 +1,6 @@
 <html>
   <head>
-    <link rel="stylesheet" href="../vendor/purecss-0.3.0.css">
+    <link rel="stylesheet" href="../client/vendor/purecss-0.3.0.css">
     <link rel="stylesheet" href="shop/shop.css">
   </head>
   <body>
@@ -12,7 +12,7 @@
             <li class="pure-menu-selected"><a href="#">Nulla</a></li>
             <li><a href="#">Fusce</a></li>
           </ul>
-          <a class="pure-cart pure-button js-cart">0 Items</a>
+          <a class="pure-cart pure-button cart-button">0 Items</a>
         </div>
       </div>
 
@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <div class="bootstrap">
+    <div class="bootstrap-widget">
     </div>
 
     <textarea id="cart-with-items-template" style="display: none;">
@@ -78,11 +78,12 @@
       <div class="cart">
         <form role="form">
           <div class="form-group has-error">
-            <label for="cart-phone">Your phone</label>
+            <label class="control-label" for="cart-phone">Your phone</label>
             <input type="phone" name="phone" class="form-control" id="cart-phone" placeholder="Enter phone" required>
+            <span class="help-block">Invalid phone number.</span>
           </div>
-          <div class="form-group">
-            <label for="cart-email">Your email</label>
+          <div class="form-group has-success">
+            <label class="control-label" for="cart-email">Your email</label>
             <input type="email" name="email" class="form-control" id="cart-email" placeholder="Enter email" required>
           </div>
         </form>
@@ -100,13 +101,13 @@
       </div>
     </textarea>
 
-    <link rel="stylesheet" href="../vendor/bootstrap-3.0.2/css/bootstrap-widget.css" type="text/css">
+    <link rel="stylesheet" href="../client/vendor/bootstrap-3.0.2/css/bootstrap-widget.css" type="text/css">
     <link rel="stylesheet" href="cart.css" type="text/css">
-    <script src="../vendor/jquery-1.10.2.js"></script>
-    <script src="../vendor/underscore-1.5.2.js"></script>
-    <script src="../vendor/bootstrap-3.0.2/js/bootstrap.js"></script>
+    <script src="../client/vendor/jquery-1.10.2.js"></script>
+    <script src="../client/vendor/underscore-1.5.2.js"></script>
+    <script src="../client/vendor/bootstrap-3.0.2/js/bootstrap.js"></script>
     <script src="cart.js"></script>
-    <script>$(function(){salejs.initialize()})</script>
+    <script>$(function(){cartjs.initialize()})</script>
 
     <!-- Live CSS Reload. -->
     <script>

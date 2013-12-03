@@ -1,7 +1,7 @@
 (function(){
   // Globals.
   var app = {}
-  window.salejs = app
+  window.cartjs = app
 
   // Helpers.
   var p = console.log.bind(console)
@@ -9,7 +9,7 @@
 
   app.initialize = function(options){
     options = options || {}
-    var $cart = $('.js-cart')
+    var $cart = $('.cart-button')
 
     // Showing mockup
     $cart.popover({
@@ -17,7 +17,7 @@
       content   : $(window.location.hash || '#cart-with-items-template').val(),
       html      : true,
       placement : 'bottom',
-      container : 'body > .bootstrap'
+      container : 'body > .bootstrap-widget'
     })
     $cart.popover('show')
   }

@@ -1,6 +1,12 @@
 Cart Widget that can be embedded into sites in order to allow its users to
 buy products and send orders to the site owner.
 
+## TODO
+
+- Add format.js and proper phone number validation.
+- Add mail notification for the user if he provides email.
+- Add ability to set if field required.
+
 ## Project history
 
 Detailed [explanation](http://jslang.info/projects/salejs) of every step in the history
@@ -8,6 +14,11 @@ of the project. Also, there's a git tag for every step - type `git checkout <tag
 and `git checkout master` to set project to the latest state.
 
 - HTML Mockups - `html-mockups`.
+
+## How to add language
+
+1. Add new language to `client/languages`.
+2. Add new language to `server/languages`.
 
 ## How to install NodeJS
 
@@ -39,7 +50,7 @@ Download Twitter Bootstrap http://getbootstrap.com, go to `css` folder, create
 Create file `bootstrap-widget.less` and put import bootstrap styles into namespace.
 
 ``` CSS
-.bootstrap {@import "./bootstrap.less";}
+.bootstrap-widget {@import "./bootstrap.less";}
 ```
 
 Now run LESS and convert it to CSS
@@ -49,6 +60,6 @@ lessc bootstrap-widget.less > bootstrap-widget.css
 ```
 
 You should get file `bootstrap-widget.css` with all bootstrap styles put under
-the `bootstrap` namespace.
+the `bootstrap-widget` namespace.
 
 Copyright (c) Alexey Petrushin, http://petrush.in, released under the MIT license.
