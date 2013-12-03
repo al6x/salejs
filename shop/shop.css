@@ -38,7 +38,7 @@ body .primary-button {
   padding: 3em 0.5em;
 }
   .splash .splash-head {
-    font-size: 300%;
+    font-size: 200%;
     margin: 0em 0;
     line-height: 1.2em;
   }
@@ -48,7 +48,7 @@ body .primary-button {
     line-height: 1.4em;
   }
   .splash .primary-button {
-    font-size: 150%;
+    font-size: 100%;
   }
 
 .pure-cart {

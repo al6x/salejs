@@ -51,7 +51,7 @@
         <div class="cart-items">
           <div class="cart-item">
             <div class="cart-item-name">Nice Boots</div>
-            <div class="cart-item-remove">&times;</div>
+            <a class="cart-item-remove">&times;</a>
             <input class="cart-item-quantity form-control" type="text" value="1">
             <div class="cart-item-multiply-sign">&times;</div>
             <div class="cart-item-price">$10</div>
@@ -59,7 +59,7 @@
           </div>
           <div class="cart-item">
             <div class="cart-item-name">Super ultra mega pro level Black Hat</div>
-            <div class="cart-item-remove">&times;</div>
+            <a class="cart-item-remove">&times;</a>
             <input class="cart-item-quantity form-control" type="text" value="33">
             <div class="cart-item-multiply-sign">&times;</div>
             <div class="cart-item-price">$10</div>
@@ -101,13 +101,18 @@
       </div>
     </textarea>
 
-    <link rel="stylesheet" href="http://localhost:3000/v1/vendor/bootstrap-3.0.2/css/bootstrap-widget.css" type="text/css">
-    <link rel="stylesheet" href="http://localhost:3000/v1/cart.css" type="text/css">
-    <script src="http://localhost:3000/v1/vendor/jquery-1.10.2.js"></script>
-    <script src="http://localhost:3000/v1/vendor/underscore-1.5.2.js"></script>
-    <script src="http://localhost:3000/v1/vendor/bootstrap-3.0.2/js/bootstrap.js"></script>
     <script src="http://localhost:3000/v1/cart.js"></script>
-    <script>$(function(){cartjs.initialize()})</script>
+    <script>
+      cartjs.initialize({
+        baseUrl: 'http://localhost:3000/v1'
+      })
+    </script>
+
+    <style>
+      /* Fixing position of widget. */
+      .bootstrap-widget .popover {margin-left: -80px !important;}
+      .bootstrap-widget .popover .arrow {left: 208px !important;}
+    </style>
 
   </body>
 </html>

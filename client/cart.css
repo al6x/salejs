@@ -16,11 +16,13 @@
   text-overflow: ellipsis;
   font-weight: bold;}
 
-.cart .cart-item-remove {
+.cart a.cart-item-remove {
   float: right;
   line-height: 28px;
   font-size: 18px;
-  color: #999;}
+  color: #999;
+  text-decoration: none;}
+.cart a.cart-item-remove:hover {color: #333333;}
 
 .cart .cart-item-quantity {
   float: right;
@@ -45,25 +47,27 @@
   color: #999;
   float: right;}
 
-/* Purchase button. */
-.cart .cart-purchase-button {
-  margin-top: 15px;
+/* Purchase and Buy buttons. */
+.cart .cart-purchase-button,
+.cart .cart-send-order-button {
   width: 100%;
   text-align: center;
   font-weight: bold;
 }
+.cart .cart-purchase-button {margin-top: 15px;}
+.cart .cart-send-order-button {margin-top: 8px;}
 
 /* Message. */
 .cart .cart-message {
   color: #999;
   margin-top: 20px;
   margin-bottom: 20px;}
+.cart .cart-message-error {color: #b94a48;}
 
 /* Contacts. */
-
 
 /* Helpers. */
 .cart-clearfix {clear: both;}
 
-.bootstrap-widget .popover {margin-left: -80px !important;}
-.bootstrap-widget .popover.bottom .arrow {left: 208px;}
+/* Need this to check when stylesheet loading will be finished */
+#cart-loaded {position: absolute;}
