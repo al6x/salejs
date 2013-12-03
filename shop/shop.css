@@ -1,0 +1,58 @@
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0 auto;
+  line-height: 1.7em;
+}
+
+.l-box {
+  padding: 1em;
+}
+
+.header {
+  margin: 0 0;
+}
+
+  .header .pure-menu {
+    padding: 0.8em 0.5em;
+  }
+
+    .header .pure-menu li a:hover,
+    .header .pure-menu li a:focus {
+      background: none;
+      border: none;
+      color: #aaa;
+    }
+
+body .primary-button {
+  background: #02a6eb;
+  color: #fff;
+}
+
+.splash {
+  margin: 2em auto 0;
+  padding: 3em 0.5em;
+}
+  .splash .splash-head {
+    font-size: 300%;
+    margin: 0em 0;
+    line-height: 1.2em;
+  }
+  .splash .splash-subhead {
+    color: #999;
+    font-weight: 300;
+    line-height: 1.4em;
+  }
+  .splash .primary-button {
+    font-size: 150%;
+  }
+
+.pure-cart {
+  float: right;
+  color: #fff !important;
+  background: #02a6eb;
+}
