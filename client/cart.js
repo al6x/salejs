@@ -47,6 +47,7 @@
     // console.info.apply(console, args)
   }
 
+
   // Async helper to simplify error handling in callbacks.
   var fork = function(onError, onSuccess){
     return function(){
@@ -133,22 +134,6 @@
     }))
   }
 
-  // Loading CSS & JS resources.
-  app.loadResources = function(callback){
-    var baseUrl = this.baseUrl
-    var language = this.language
-    requireJQuery(baseUrl + '/vendor/jquery-1.10.2.js', fork(callback, function(jQuery){
-      $ = jQuery
-      // Loading CSS and JS resources.
-      var done = parallel(callback)
-      loadCss(baseUrl + '/vendor/bootstrap-3.0.2/css/bootstrap-widget.css', 'cart-loaded', done())
-      loadCss(baseUrl + '/cart.css', 'cart-loaded', done())
-      loadJs(baseUrl + '/vendor/bootstrap-3.0.2/js/bootstrap.js', done())
-      // loadJs(baseUrl + '/vendor/underscore-1.5.2.js', done())
-      loadJs(baseUrl + '/languages/' + language + '.js', done())
-    }))
-  }
-
   // Template helpers.
   app.templates = {}
   app.template = function(name, fn){
@@ -164,6 +149,18 @@
   app.render = function(){
     var args = Array.prototype.slice.call(arguments, 1)
     return this.templates[arguments[0]].apply(null, args)
+  }
+
+  // Helper to escape HTML.
+  var escapeHtml = function(str){return $('<div/>').text(str).html()}
+  // var escapeId = function(str){return str.replace()}
+
+  // Storage, for now just using `localStorage` and ignoring old browser that doesn't
+  // support it, later will be updated to support older browsers also.
+  var db = {
+    get    : function(key){return window.localStorage.getItem(key)},
+    set    : function(key, value){window.localStorage.setItem(key, value)},
+    remove : function(key){window.localStorage.removeItem(key)}
   }
 
   // # Translation.
@@ -194,18 +191,6 @@
     return str
   }
 
-  // Helper to escape HTML.
-  var escapeHtml = function(str){return $('<div/>').text(str).html()}
-  // var escapeId = function(str){return str.replace()}
-
-  // Storage, for now just using `localStorage` and ignoring old browser that doesn't
-  // support it, later will be updated to support older browsers also.
-  var db = {
-    get    : function(key){return window.localStorage.getItem(key)},
-    set    : function(key, value){window.localStorage.setItem(key, value)},
-    remove : function(key){window.localStorage.removeItem(key)}
-  }
-
   // # Minimalistic version of heart of Backbone.js - Events / Observer Pattern.
   var Events = function(obj){
     obj.on = function(){
@@ -226,6 +211,27 @@
     }
   }
 
+  // # Assembling and starting application.
+  //
+  // Adding events to `app`.
+  Events(app)
+
+  // Loading CSS & JS resources.
+  app.loadResources = function(callback){
+    var baseUrl = this.baseUrl
+    var language = this.language
+    requireJQuery(baseUrl + '/vendor/jquery-1.10.2.js', fork(callback, function(jQuery){
+      $ = jQuery
+      // Loading CSS and JS resources.
+      var done = parallel(callback)
+      loadCss(baseUrl + '/vendor/bootstrap-3.0.2/css/bootstrap-widget.css', 'cart-loaded', done())
+      loadCss(baseUrl + '/cart.css', 'cart-loaded', done())
+      loadJs(baseUrl + '/vendor/bootstrap-3.0.2/js/bootstrap.js', done())
+      // loadJs(baseUrl + '/vendor/underscore-1.5.2.js', done())
+      loadJs(baseUrl + '/languages/' + language + '.js', done())
+    }))
+  }
+
   // Initialization.
   app.initialize = function(options, callback){
     // Parsing arguments.
@@ -236,33 +242,83 @@
     this.baseUrl  = options.baseUrl  || 'http://salejs.com/v1'
     this.language = options.language || 'en'
     this.currency = options.currency || '$'
+    this.requireName    = ('requireName' in options)    ? options.requireName    : true
+    this.requirePhone   = ('requirePhone' in options)   ? options.requirePhone   : true
+    this.requireEmail   = ('requireEmail' in options)   ? options.requireEmail   : false
+    this.requireAddress = ('requireAddress' in options) ? options.requireAddress : false
+    this.emailOrdersTo  = options.emailOrdersTo
+    if(!this.emailOrdersTo)
+      return callback(new Error("cartjs - `emailOrdersTo` not set, set it please!"))
 
+    // // Waiting for document ready, `jQuery` can't be used because it may not be yet loaded.
+    // var ensureDOMReady = function(callback){
+    //   var interval = setInterval(function() {
+    //     if (document.readyState === 'complete') {
+    //       callback()
+    //       clearInterval(interval)
+    //     }
+    //   }, 10)
+    // }
 
     // Loading resources.
     this.loadResources(fork(callback, bind(function(){
-
-      options = options || {}
-      var $cart = $('.cart-button')
-
-      var cart = new app.Cart()
-      cart.add({name: 'Boots', price: '10', quantity: '2'})
-      cart.add({name: 'Hat', price: '5', quantity: '5'})
-
-      var cartView = new app.CartView(cart)
-      cartView.render()
-
-      // Showing mockup
-      $cart.popover({
-        // title     : '',
-        content   : cartView.$el,
-        html      : true,
-        placement : 'bottom',
-        container : 'body > .bootstrap-widget'
-      })
-      $cart.popover('show')
-
+      this.initializeModels()
+      this.initializeViews()
       callback()
     }, this)))
+  }
+
+  app.initializeModels = function(){
+    this.cart = new app.Cart()
+    this.cart.load()
+
+    this.contacts = new app.Contacts()
+  }
+
+  app.initializeViews = function(){
+    this.cartButtonView = new app.CartButtonView(this.cart)
+    this.cartButtonView.render()
+
+    this.cartPopupView = new app.CartPopupView()
+    this.cartPopupView.render()
+
+    this.cartView = new app.CartView(this.cart)
+    this.cartView.render()
+
+    this.contactsView = new app.ContactsView(this.contacts, this.cart)
+    this.contactsView.render()
+
+    // Showing and hiding popup.
+    app.on('toggle popup', bind(function(){
+      if(this.cartPopupView.isActive()) this.cartPopupView.hide()
+      else this.cartPopupView.show(this.cartView)
+    }, this))
+
+    // Showing contact form.
+    app.on('purchase', bind(function(){
+      this.cartPopupView.show(this.contactsView)
+    }, this))
+
+    // Sending order.
+    app.on('send order', bind(function(){
+      p('sending order...')
+    }, this))
+
+    // Showing popup with cart whenever user makes any change to cart.
+    app.cart.on('add item', 'remove item', 'update item', bind(function(){
+      this.cartPopupView.show(this.cartView)
+    }, this))
+
+    // Processing click on the buy button.
+    $(document).on('click', '.cart-buy-button', bind(function(e){
+      e.preventDefault()
+      var $button = $(e.currentTarget)
+      this.cart.add({
+        name     : $button.attr('data-name'),
+        price    : parseInt($button.attr('data-price')),
+        quantity : parseInt($button.attr('data-quantity') || 1)
+      })
+    }, this))
   }
 
   app.priceWithCurrency = function(price){
@@ -349,6 +405,124 @@
     if(!item.name) throw new Error('no name!')
     if(!item.price) throw new Error('no price!')
     if(!((item.quantity > 0) || (item.quantity === 0))) throw new Error('no quantity!')
+  }
+
+  // Contacts.
+  app.Contacts = function(){
+    extend(this, {name: '', phone: '', email: '', address: '', errors: {}})
+  }
+  var proto = app.Contacts.prototype
+  Events(proto)
+
+  proto.set = function(attrs){
+    extend(this, attrs)
+    this.validate()
+    this.trigger('update', this)
+    // this.save()
+  }
+
+  proto.validate = function(){
+    this.errors = {}
+    if(app.requireName && !this.name) this.errors.name = ["can't be empty"]
+    if(app.requirePhone){
+      var errors = []
+      if(!this.phone) errors.push("can't be empty")
+      if(!/^[0-9\- +]+$/.test(this.phone)) errors.push("invalid phone number")
+      if(errors.length > 0) this.errors.phone = errors
+    }
+    if(app.requireEmail && !this.email) this.errors.email = ["can't be empty"]
+    if(app.requireAddress && !this.address) this.errors.address = ["can't be empty"]
+    return this.errors
+  }
+
+  proto.toJSON = function(){
+    var data = {}
+    if(app.requireName)    data.name = this.name
+    if(app.requirePhone)   data.phone = this.phone
+    if(app.requireEmail)   data.email = this.email
+    if(app.requireAddress) data.address = this.address
+    return data
+  }
+
+  proto.isValid = function(){return isObjectEmpty(this.errors)}
+
+  // # Views.
+  //
+  // Cart button.
+  app.CartButtonView = function(cart){
+    this.cart = cart
+    bindAll('render', this)
+    this.cart.on('add item', 'remove item', 'update item', this.render)
+
+    $(document).on('click', '.cart-button', function(e){
+      e.preventDefault()
+      app.trigger('toggle popup')
+    })
+  }
+  var proto = app.CartButtonView.prototype
+
+  proto.render = function(){
+    var $button = $('.cart-button')
+    $button.find('.cart-button-quantity').text(this.cart.items.length)
+    $button.find('.cart-button-label').text(t('cartButtonLabel', {count: this.cart.items.length}))
+    $button.removeClass('cart-button-empty').removeClass('cart-button-not-empty')
+    $button.addClass(this.cart.isEmpty() ? 'cart-button-empty' : 'cart-button-not-empty')
+    $button.show()
+  }
+
+  // Popup.
+  app.CartPopupView = function(){
+    this._isActive = false
+    bindAll('render', 'show', 'hide', 'isActive', this)
+  }
+  var proto = app.CartPopupView.prototype
+
+  proto.render = function(){}
+
+  // Bootstrap Popup doesn't fit well into dynamic approach we using, so logic in
+  // the `render` method is a little tricky.
+  proto.show = function(content){
+    var contentEl = content.$el || content
+    if(this.isActive()){
+      if(this.content === content) return
+      else{
+        // We already have an opened Popup and need only to change its content.
+        var $popoverContent = $('body > .bootstrap-widget .popover-content')
+        $popoverContent.find('> *').detach()
+        $popoverContent.append(contentEl)
+        this.content = content
+      }
+    }else{
+      this._isActive = true
+      this.content = content
+
+      // Bootstrap styles will be applied only to elements inside of `.bootstrap` namespace,
+      // creating such namespace if it's not yet created.
+      if(!($('.bootstrap-widget').size() > 0))
+        $('<div class=".bootstrap-widget"></div>').appendTo('body')
+
+      $('.cart-button').popover({
+        // title     : '',
+        content   : contentEl,
+        html      : true,
+        placement : 'bottom',
+        container : 'body > .bootstrap-widget',
+        trigger   : 'manual'
+      })
+      $('.cart-button').popover('show')
+    }
+  }
+
+  proto.hide = function(){
+    $('.cart-button').popover('destroy')
+    this._isActive = false
+    this.content = null
+  }
+
+  proto.isActive = function(){
+    // We need to check also if element exists because site may use dynamic page update and
+    // tools like PJAX or Ruby on Rails Turbolinks.
+    return this._isActive && ($('.bootstrap-widget .popover').size() > 0)
   }
 
   // Cart.
@@ -439,7 +613,6 @@
     this.cart.remove($removeButton.attr('data-name'))
   }
 
-
   app.template('cart', function(add, cart){
     add('<div class="cart">')
       if(cart.items.length > 0){
@@ -449,8 +622,7 @@
         add('</div>')
 
         // Purchase button.
-        add('<button class="btn btn-primary cart-purchase-button" type="button">'
-        + escapeHtml(t('purchaseButtonTitle')) + '</button>')
+        add('<button class="btn btn-primary cart-purchase-button" type="button"></button>')
 
       }else add('<div class="cart-message">' + escapeHtml(t('emptyCart')) + '</div>')
     add('</div>')
@@ -477,6 +649,84 @@
   })
 
   // Contact form.
+  app.ContactsView = function(contacts, cart){
+    this.contacts = contacts
+    this.cart = cart
+    bindAll('render', 'renderUpdate', 'updateInput', this)
+
+    this.contacts.on('update', this.renderUpdate)
+    this.cart.on('add item', 'remove item', 'update item', this.render)
+
+    this.$el = $('<div class="cart"></div>')
+    this.$el.on('change', 'input, textarea', this.updateInput)
+    // this.$el.on('change', 'textarea', this.updateTextarea)
+    var sendOrder = bind(function(e){
+      e.preventDefault()
+      this.contacts.set(this.getValues())
+      this.showAllErrors = true
+      this.renderUpdate()
+      app.trigger('send order')
+    }, this)
+    this.$el.on('click', '.cart-send-order-button', sendOrder)
+    this.$el.on('submit', 'form', sendOrder)
+
+    // When user enter values in form for the first time not all errors
+    // should be shown, but only on those fields he already touched.
+    // But, if he tries to submit form - errors on all fields should be
+    // shown.
+    this.showAllErrors = false
+  }
+  var proto = app.ContactsView.prototype
+
+  proto.render = function(){
+    this.$el.html(app.render('contact-form'
+    , this.contacts, this.cart.totalPrice(), this.showAllErrors))
+  }
+
+  // We can't rerender the whole form because the focus and selection will be lost,
+  // making only small changes and only if they are neccessarry.
+  proto.renderUpdate = function(){
+    this.$el.find('.form-group').each(bind(function(i, e){
+      var $group = $(e)
+      var $input = $group.find('input, textarea')
+      var input = $input[0]
+      var name = $input.attr('name')
+
+      // Setting error or success.
+      $group.removeClass('has-error').removeClass('has-success')
+      // Showing errors only if field has been changed.
+      if(this.showAllErrors || ($input.attr('data-changed') == 'changed'))
+        $group.addClass(this.contacts.errors[name] ? 'has-error' : 'has-success')
+
+      // Updating value.
+      if($input.val() !== this.contacts[name]){
+        var selectionStart = input.selectionStart
+        var selectionEnd   = input.selectionEnd
+        $input.val(this.contacts[name])
+        input.setSelectionRange(selectionStart, selectionEnd)
+      }
+    }, this))
+  }
+
+  proto.updateInput = function(e){
+    e.preventDefault()
+    var $input = $(e.currentTarget)
+    // We need this marking to show errors only on fields that has been changed.
+    $input.attr('data-changed', 'changed')
+    var attrs = {}
+    attrs[$input.attr('name')] = $input.val()
+    this.contacts.set(attrs)
+  }
+
+  proto.getValues = function(){
+    var attrs = {}
+    this.$el.find('input, textarea').each(bind(function(i, e){
+      var $input = $(e)
+      attrs[$input.attr('name')] = $input.val()
+    }, this))
+    return attrs
+  }
+
   app.template('contact-form', function(add, contacts, totalPrice, showAllErrors){
     add('<form role="form">')
       var errorClass = function(attribute){

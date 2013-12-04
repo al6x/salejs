@@ -13,7 +13,13 @@
             <li class="pure-menu-selected"><a href="#">Nulla</a></li>
             <li><a href="#">Fusce</a></li>
           </ul>
-          <a class="pure-cart pure-button cart-button">0 Items</a>
+
+          <!-- Cart button, hiding it until `cartjs` would be loaded and initialize it. -->
+          <a class="pure-cart pure-button cart-button" style="display: none;">
+            <span class="cart-button-quantity">0</span>
+            <span class="cart-button-label">items</span>
+          </a>
+
         </div>
       </div>
 
@@ -36,7 +42,8 @@
               </h2>
 
               <p>
-                <a href="#" class="pure-button primary-button">Buy</a>
+                <a href="#" class="pure-button primary-button cart-buy-button"
+                  data-name="Aliquam erat volutpat" data-price="10" data-quantity="1">Buy</a>
               </p>
             </div>
           </div>
@@ -50,7 +57,8 @@
     <script src="http://localhost:3000/v1/cart.js"></script>
     <script>
       cartjs.initialize({
-        baseUrl: 'http://localhost:3000/v1'
+        baseUrl       : 'http://localhost:3000/v1',
+        emailOrdersTo : 'apetrushinpost@yandex.ru'
       })
     </script>
 
