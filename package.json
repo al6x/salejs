@@ -10,7 +10,8 @@
     "url"  : "http://petrush.in"
   },
   "dependencies" : {
-    "express" : "3.4.x"
+    "express" : "3.4.x",
+    "nodemailer" : "0.5.x"
   },
   "license"      : "MIT"
 }

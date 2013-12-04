@@ -42,9 +42,9 @@
     return a
   }
   var debug = function(){
-    var args = Array.prototype.slice.call(arguments)
-    args.unshift('cartjs')
-    console.info.apply(console, args)
+    // var args = Array.prototype.slice.call(arguments)
+    // args.unshift('cartjs')
+    // console.info.apply(console, args)
   }
 
   // Cross domain request.
@@ -328,10 +328,33 @@
 
     // Sending order.
     app.on('send order', bind(function(){
-      // Sending order to server.
-      server.post(this.baseUrl + '/orders', {name: 'order'}, function(err){
-        if(err) console.log("can't send order!")
-      })
+      if(app.contacts.isValid()){
+        // Preparing order.
+        var order = {
+          price             : this.cart.totalPrice(),
+          emailOrdersTo     : this.emailOrdersTo,
+          site              : window.location.host,
+          currency          : this.currency,
+          language          : this.language
+        }
+        extend(order, this.contacts.toJSON())
+        extend(order, this.cart.toJSON())
+
+        // Clearing the cart and showing success message.
+        this.cart.removeAll()
+        var message = '<div class="cart"><div class="cart-message">'
+        + escapeHtml(t('orderSent')) + '</div></div>'
+        this.cartPopupView.show(message)
+
+        // Sending order to server.
+        server.post(this.baseUrl + '/orders', order, bind(function(err){
+          if(err){
+            var message = '<div class="cart"><div class="cart-message cart-message-error">'
+            + escapeHtml(t('orderFailed')) + '</div></div>'
+            this.cartPopupView.show(message)
+          }
+        }, this))
+      }
     }, this))
 
     // Showing popup with cart whenever user makes any change to cart.
