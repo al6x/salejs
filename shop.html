@@ -1,7 +1,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="http://localhost:3000/v1/vendor/purecss-0.3.0.css">
+    <link rel="stylesheet" href="client/vendor/purecss-0.3.0.css">
     <link rel="stylesheet" href="shop/shop.css">
   </head>
   <body>
@@ -27,34 +27,63 @@
         <div class="pure-g-r">
           <div class="pure-u-1-3">
             <div class="l-box splash-image">
-              <img src="http://placehold.it/500x350" alt="Placeholder image for example.">
+              <img src="http://placehold.it/300x200" alt="Placeholder image for example.">
             </div>
           </div>
 
           <div class="pure-u-2-3">
             <div class="l-box splash-text">
               <h1 class="splash-head">
-                Aliquam erat volutpat.
+                Aliquam erat
               </h1>
 
-              <h2 class="splash-subhead">
-  Morbi viverra, justo quis placerat commodo, nisi metus vehicula tellus, lobortis iaculis eros nunc vitae magna. Duis a auctor tellus, et elementum magna. Phasellus at nunc sodales lorem ultricies varius. Nam ultricies iaculis magna vel feugiat. Mauris nec eros commodo, commodo nisl eget, interdum nisi. Aliquam erat volutpat. Aenean id augue consequat, consequat mauris et, facilisis dui. Vestibulum sit amet neque eu neque rutrum auctor tempus a libero. Nulla a nunc vel enim euismod rhoncus. Duis sit amet nisl in lacus ultrices vestibulum vel eget lacus. Nam et odio ultrices, interdum ligula ac, fringilla mi. Donec et rutrum dolor, eu tincidunt arcu. Fusce nunc ipsum, volutpat ultricies consequat vitae, vestibulum venenatis magna.
-              </h2>
+              <p class="splash-subhead">Morbi viverra, justo quis placerat commodo, nisi metus vehicula tellus, lobortis iaculis eros nunc vitae magna. Duis a auctor tellus, et elementum magna. Phasellus at nunc sodales lorem ultricies varius. Nam ultricies iaculis magna vel feugiat. Mauris nec eros commodo, commodo nisl eget, interdum nisi. Aenean id augue consequat, consequat mauris et, facilisis dui.
+              </p>
 
               <p>
                 <a href="#" class="pure-button primary-button cart-buy-button"
-                  data-name="Aliquam erat volutpat" data-price="10" data-quantity="1">Buy</a>
+                  data-name="Aliquam volutpat" data-price="10" data-quantity="1">Buy</a>
               </p>
             </div>
           </div>
         </div>
+
+              <div class="pure-g-r">
+                <div class="pure-u-1-3">
+                  <div class="l-box splash-image">
+                    <img src="http://placehold.it/300x200" alt="Placeholder image for example.">
+                  </div>
+                </div>
+
+                <div class="pure-u-2-3">
+                  <div class="l-box splash-text">
+                    <h1 class="splash-head">
+                      Duis sit
+                    </h1>
+
+                    <p class="splash-subhead">Vestibulum sit amet neque eu neque rutrum auctor tempus a libero. Nulla a nunc vel enim euismod rhoncus. Duis sit amet nisl in lacus ultrices vestibulum vel eget lacus. Nam et odio ultrices, interdum ligula ac, fringilla mi. Donec et rutrum dolor, eu tincidunt arcu. Fusce nunc ipsum, volutpat ultricies consequat vitae, vestibulum venenatis magna.
+                    </p>
+
+                    <p>
+                      <a href="#" class="pure-button primary-button cart-buy-button"
+                        data-name="Duis sit" data-price="15" data-quantity="1">Buy</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
       </div>
     </div>
 
-    <div class="bootstrap-widget">
-    </div>
+    <div class="bootstrap-widget"></div>
 
+    <!-- Loading cartjs. -->
     <script src="http://localhost:3000/v1/cart.js"></script>
+    <style>
+      /* Fixing position of widget. */
+      .bootstrap-widget .popover {margin-left: -80px !important;}
+      .bootstrap-widget .popover .arrow {left: 208px !important;}
+    </style>
     <script>
       cartjs.initialize({
         baseUrl       : 'http://localhost:3000/v1',
@@ -62,11 +91,18 @@
       })
     </script>
 
-    <style>
-      /* Fixing position of widget. */
-      .bootstrap-widget .popover {margin-left: -80px !important;}
-      .bootstrap-widget .popover .arrow {left: 208px !important;}
-    </style>
-
+    <!-- Live CSS Reload. -->
+    <!-- <script>
+      setInterval(function(){
+        var links = document.querySelectorAll('link')
+        // Updating only the last style, if you need to update all styles remove line below.
+        links = [links[links.length - 1]]
+        for(var i = 0; i < links.length; i++){
+          var link = links[i]
+          var href = link.getAttribute('href').split('#')[0]
+          link.setAttribute('href', href + '#' + Math.random())
+        }
+      }, 1000)
+    </script> -->
   </body>
 </html>
