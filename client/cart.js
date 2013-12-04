@@ -42,11 +42,38 @@
     return a
   }
   var debug = function(){
-    // var args = Array.prototype.slice.call(arguments)
-    // args.unshift('cartjs')
-    // console.info.apply(console, args)
+    var args = Array.prototype.slice.call(arguments)
+    args.unshift('cartjs')
+    console.info.apply(console, args)
   }
 
+  // Cross domain request.
+  var server = {}
+  server.send = function(method, url, data, callback){
+    if(!window.FormData || !window.XMLHttpRequest)
+      return callback(new Error("Your browser doesn't support that feature, please update it."))
+    var formData = new FormData()
+    formData.append('data', JSON.stringify(data))
+    var responded = false
+    var xhr = new XMLHttpRequest()
+    xhr.open(method.toUpperCase(), url, true)
+    xhr.onreadystatechange = function(){
+      if(responded) return
+      if(xhr.readyState == 4){
+        responded = true
+        if(xhr.status == 200) callback(null, JSON.parse(xhr.responseText))
+        else callback(new Error(xhr.responseText))
+      }
+    }
+    setTimeout(function(){
+      if(responded) return
+      responded = true
+      callback(new Error("no response from " + url + "!"))
+    }, timeout)
+    debug(method, url, data)
+    xhr.send(formData)
+  }
+  server.post = function(url, data, callback){this.send('post', url, data, callback)}
 
   // Async helper to simplify error handling in callbacks.
   var fork = function(onError, onSuccess){
@@ -301,7 +328,10 @@
 
     // Sending order.
     app.on('send order', bind(function(){
-      p('sending order...')
+      // Sending order to server.
+      server.post(this.baseUrl + '/orders', {name: 'order'}, function(err){
+        if(err) console.log("can't send order!")
+      })
     }, this))
 
     // Showing popup with cart whenever user makes any change to cart.

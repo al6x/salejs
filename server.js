@@ -17,6 +17,23 @@ app.use('/v1', function(req, res, next){
   next()
 })
 
+// Middleware for request parsing.
+app.use(express.json({limit: options.requestLimit}))
+app.use(express.urlencoded())
+app.use(express.multipart({limit: options.requestLimit}))
+
+// Processing orders.
+app.post('/v1/orders', function(req, res){
+  console.log('processing order...', req.body)
+
+  // Setting special headers to allow cross domain requsts.
+  res.header('Access-Control-Allow-Origin',  '*')
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+  res.header('Access-Control-Allow-Headers', 'Content-Type')
+
+  res.end('{}')
+})
+
 // Starting server.
 app.listen(options.port)
 console.info("salejs server started on " + options.port + " port")
