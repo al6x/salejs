@@ -1,5 +1,13 @@
-Cart Widget that can be embedded into sites in order to allow its users to
-buy products and send orders to the site owner.
+Cart Widget turning any Site into Shop.
+
+![Cart screenshot](readme/cart.png)
+
+## Installation
+
+1. Install NodeJS
+2. Install dependencies `npm install`
+3. Run server `node server.js`
+4. Open `shop.html` in browser.
 
 ## TODO
 
