@@ -198,6 +198,33 @@
   var escapeHtml = function(str){return $('<div/>').text(str).html()}
   // var escapeId = function(str){return str.replace()}
 
+  // Storage, for now just using `localStorage` and ignoring old browser that doesn't
+  // support it, later will be updated to support older browsers also.
+  var db = {
+    get    : function(key){return window.localStorage.getItem(key)},
+    set    : function(key, value){window.localStorage.setItem(key, value)},
+    remove : function(key){window.localStorage.removeItem(key)}
+  }
+
+  // # Minimalistic version of heart of Backbone.js - Events / Observer Pattern.
+  var Events = function(obj){
+    obj.on = function(){
+      var fn = arguments[arguments.length - 1]
+      for(var i = 0; i < (arguments.length - 1); i++){
+        var name = arguments[i]
+        this.subscribers = this.subscribers || {};
+        (this.subscribers[name] = this.subscribers[name] || []).push(fn)
+      }
+    }
+    obj.trigger = function(){
+      var event = arguments[0]
+      var args  = Array.prototype.slice.call(arguments, 1)
+      debug(event, args)
+      if(!this.subscribers) return
+      var list = this.subscribers[event] || []
+      for(var i = 0; i < list.length; i++) list[i].apply(null, args)
+    }
+  }
 
   // Initialization.
   app.initialize = function(options, callback){
@@ -217,16 +244,17 @@
       options = options || {}
       var $cart = $('.cart-button')
 
-      var cartData = {
-        items: [
-          {name: 'Boots', quantity: 1, price: 10}
-        ]
-      }
+      var cart = new app.Cart()
+      cart.add({name: 'Boots', price: '10', quantity: '2'})
+      cart.add({name: 'Hat', price: '5', quantity: '5'})
+
+      var cartView = new app.CartView(cart)
+      cartView.render()
 
       // Showing mockup
       $cart.popover({
         // title     : '',
-        content   : app.render('cart', cartData),
+        content   : cartView.$el,
         html      : true,
         placement : 'bottom',
         container : 'body > .bootstrap-widget'
@@ -241,6 +269,176 @@
     if(['$', '£'].indexOf(this.currency) >= 0) return app.currency + price
     else return price + app.currency
   }
+
+  // # Models.
+  //
+  // Cart.
+  app.Cart = function(items){this.items = items || []}
+  var proto = app.Cart.prototype
+  Events(proto)
+
+  proto.load = function(){
+    var jsonString = db.get('cart-items')
+    debug('loading cart', jsonString)
+    if(jsonString){
+      var json = JSON.parse(jsonString)
+      this.items = json.items || []
+    }
+  }
+
+  proto.save = function(){db.set('cart-items', JSON.stringify(this))}
+
+  proto.toJSON = function(){return {items: JSON.parse(JSON.stringify(this.items))}}
+
+  proto.removeAll = function(){
+    var length = this.items.length
+    for(var i = 0; i < length; i++)
+      this.remove(this.items[this.items.length - 1])
+  }
+
+  proto.totalPrice = function(){
+    var sum = 0
+    each(this.items, function(item){sum = sum + item.price * item.quantity})
+    return sum
+  }
+
+  proto.totalQuantity = function(){
+    var sum = 0
+    each(this.items, function(item){sum = sum + item.quantity})
+    return sum
+  }
+
+  proto.isEmpty = function(){return this.items.length == 0}
+
+  proto.add = function(item){
+    var i = find(this.items, function(i){return i.name == item.name})
+    if(i >= 0){
+      var existingItem = this.items[i]
+      this.update(item.name, {quantity: (existingItem.quantity + item.quantity)})
+    }else{
+      this.validateItem(item)
+      this.items.push(item)
+      this.save()
+      this.trigger('add item', item)
+    }
+  }
+
+  proto.remove = function(nameOrItem){
+    var name = nameOrItem.name || nameOrItem
+    var i = find(this.items, function(i){return i.name = name})
+    if(i >= 0){
+      var item = this.items[i]
+      this.items.splice(i, 1)
+      this.save()
+      this.trigger('remove item', item)
+    }
+  }
+
+  proto.update = function(name, attrs){
+    var i = find(this.items, function(i){return i.name == name})
+    if(i >= 0){
+      var item = this.items[i]
+      this.validateItem(extend({}, item, attrs))
+      extend(item, attrs)
+      this.save()
+      this.trigger('update item', item)
+    }
+  }
+
+  proto.validateItem = function(item){
+    if(!item.name) throw new Error('no name!')
+    if(!item.price) throw new Error('no price!')
+    if(!((item.quantity > 0) || (item.quantity === 0))) throw new Error('no quantity!')
+  }
+
+  // Cart.
+  app.CartView = function(cart){
+    this.cart = cart
+    bindAll('render', 'renderPurchaseButton', 'renderAddItem', 'renderRemoveItem'
+    , 'renderUpdateItem', 'scrollQuantity', 'updateQuantity', 'removeItem', this)
+
+    this.cart.on('add item', 'remove item', 'update item', this.renderPurchaseButton)
+    this.cart.on('add item', this.renderAddItem)
+    this.cart.on('remove item', this.renderRemoveItem)
+    this.cart.on('update item', this.renderUpdateItem)
+
+    this.$el = $('<div class="cart"></div>')
+    this.$el.on('keyup', '.cart-item-quantity', this.scrollQuantity)
+    this.$el.on('change', '.cart-item-quantity', this.updateQuantity)
+    this.$el.on('click', '.cart-item-remove', this.removeItem)
+    this.$el.on('click', '.cart-purchase-button', function(e){
+      e.preventDefault()
+      app.trigger('purchase')
+    })
+  }
+  var proto = app.CartView.prototype
+
+  proto.render = function(){
+    this.$el.html(app.render('cart', this.cart))
+    this.renderPurchaseButton()
+  }
+
+  proto.renderPurchaseButton = function(){
+    var $purchaseButton = this.$el.find('.cart-purchase-button')
+    if(this.cart.totalQuantity() > 0) $purchaseButton.removeAttr('disabled')
+    else $purchaseButton.attr({disabled: 'disabled'})
+    $purchaseButton.html(app.render('cart-purchase-button', this.cart.totalPrice()))
+  }
+
+  proto.renderAddItem = function(item){
+    var $cartItems = this.$el.find('.cart-items')
+    if($cartItems.size() > 0) $cartItems.append(app.render('cart-item', item))
+    else this.render()
+  }
+
+  proto.renderRemoveItem = function(item){
+    if(this.cart.items.length == 0) this.render()
+    this.$el.find('.cart-item[data-name="' + escapeHtml(item.name) + '"]').remove()
+  }
+
+  proto.renderUpdateItem = function(item){
+    // We can't update the full item element because if user has focus on input - after
+    // update that focus will be lost.
+    // We using the fact that name and price of row never will be changed, only quantity
+    // will, so we will update only quantity here.
+    var $input = this.$el.find('.cart-item-quantity[data-name="' + escapeHtml(item.name) + '"]')
+    if(parseInt($input.val()) != item.quantity){
+      var input = $input[0]
+      var selectionStart = input.selectionStart
+      var selectionEnd   = input.selectionEnd
+      $input.val(item.quantity)
+      input.setSelectionRange(selectionStart, selectionEnd)
+    }
+  }
+
+  // Update quantity with Up or Down buttons.
+  proto.scrollQuantity = function(e){
+    e.preventDefault()
+    var delta = 0
+    if(e.keyCode == 38) delta = 1  // Up
+    if(e.keyCode == 40) delta = -1 // Down
+    if(delta === 0) return
+
+    var $input = $(e.currentTarget)
+    var name = $input.attr('data-name')
+    var quantity = parseInt($input.val()) + delta
+    if(quantity >= 0) this.cart.update(name, {quantity: quantity})
+  }
+
+  proto.updateQuantity = function(e){
+    e.preventDefault()
+    var $input = $(e.currentTarget)
+    var name = $input.attr('data-name')
+    var quantity = parseInt($input.val())
+    if(quantity >= 0) this.cart.update(name, {quantity: quantity})
+  }
+
+  proto.removeItem = function(e){
+    e.preventDefault()
+    var $removeButton = $(e.currentTarget)
+    this.cart.remove($removeButton.attr('data-name'))
+  }
+
 
   app.template('cart', function(add, cart){
     add('<div class="cart">')
