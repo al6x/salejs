@@ -1,6 +1,6 @@
 {
-  "name"         : "sales",
-  "main"         : "./client/cart.js",
+  "name"         : "salejs",
+  "main"         : "./server.js",
   "version"      : "0.0.1",
   "homepage"     : "https://github.com/alexeypetrushin/salejs",
   "description"  : "Cart Widget turning any Site into Shop",
