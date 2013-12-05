@@ -236,6 +236,7 @@
       var list = this.subscribers[event] || []
       for(var i = 0; i < list.length; i++) list[i].apply(null, args)
     }
+    obj.off = function(){delete this.subscribers}
   }
 
   // # Assembling and starting application.
@@ -287,12 +288,28 @@
     //   }, 10)
     // }
 
-    // Loading resources.
-    this.loadResources(fork(callback, bind(function(){
-      this.initializeModels()
+    // Checking if it has been already initialized. It may happen if Shop uses
+    // dynamic page updates, for example PJAX or Turbolinks.
+    if(!this.initialized){
+      debug('initializing')
+      // Loading resources.
+      this.loadResources(fork(callback, bind(function(){
+        // Initializing models and views.
+        this.initializeModels()
+        this.initializeViews()
+        this.initialized = true
+        callback()
+      }, this)))
+    }else{
+      debug('re-initializing')
+      // Unsubscribing all handlers.
+      app.off()
+      $(document).off('click', '.cart-buy-button')
+      $(document).off('click', '.cart-button')
+
+      // Re-initializing views.
       this.initializeViews()
-      callback()
-    }, this)))
+    }
   }
 
   app.initializeModels = function(){
@@ -552,7 +569,7 @@
       // Bootstrap styles will be applied only to elements inside of `.bootstrap` namespace,
       // creating such namespace if it's not yet created.
       if(!($('.bootstrap-widget').size() > 0))
-        $('<div class=".bootstrap-widget"></div>').appendTo('body')
+        $('<div class="bootstrap-widget"></div>').appendTo('body')
 
       $('.cart-button').popover({
         // title     : '',
