@@ -83,21 +83,12 @@
       else onSuccess.apply(null, args)
     }
   }
-
-  // Asynchronous helper, it will call `callback` when all resources will be loaded.
-  var parallel = function(callback){
-    var counter = 0
-    var responded = false
+  var once = function(fn){
+    var called = false
     return function(){
-      counter = counter + 1
-      return function(err){
-        if(responded) return
-        if(err){
-          responded = true
-          return callback(err)
-        }
-        counter = counter - 1
-        if(counter === 0) return callback()
+      if(!called){
+        called = true
+        return fn.apply(this, arguments)
       }
     }
   }
@@ -250,13 +241,23 @@
     var language = this.language
     requireJQuery(baseUrl + '/vendor/jquery-1.10.2.js', fork(callback, function(jQuery){
       $ = jQuery
-      // Loading CSS and JS resources.
-      var done = parallel(callback)
-      loadCss(baseUrl + '/vendor/bootstrap-3.0.2/css/bootstrap-widget.css', 'cart-loaded', done())
-      loadCss(baseUrl + '/cart.css', 'cart-loaded', done())
-      loadJs(baseUrl + '/vendor/bootstrap-3.0.2/js/bootstrap.js', done())
-      // loadJs(baseUrl + '/vendor/underscore-1.5.2.js', done())
-      loadJs(baseUrl + '/languages/' + language + '.js', done())
+
+      // Loading CSS and JS.
+      callback = once(callback)
+      var count = 0
+      var done = function(err){
+        count = count + 1
+        if(err) callback(err)
+        if(count == 3) callback()
+      }
+
+      loadCss(baseUrl + '/vendor/bootstrap-3.0.2/css/bootstrap-widget.css'
+      , 'bootstrap-widget-loaded', fork(callback, function(){
+        loadCss(baseUrl + '/cart.css', 'cart-loaded', done)
+      }))
+
+      loadJs(baseUrl + '/vendor/bootstrap-3.0.2/js/bootstrap.js', done)
+      loadJs(baseUrl + '/languages/' + language + '.js', done)
     }))
   }
 
