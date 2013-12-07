@@ -52,11 +52,7 @@ var initialize = function(express, options){
   //
   // Using version in path in order to provide backward compatibile API
   // in future.
-  app.use('/v1', express.static(__dirname + '/client'))
-  app.use('/v1', function(req, res, next){
-    res.setHeader('Cache-Control', 'public, max-age=31536000')
-    next()
-  })
+  app.use('/v1', express.static(__dirname + '/client', {maxAge: 31557600000}))
 
   // Middleware for request parsing.
   app.use(express.json({limit: options.requestLimit}))
