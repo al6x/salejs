@@ -1,10 +1,10 @@
 module.exports = function(app){
   // Owner email templates, users can override those templates to fit their needs.
-  app.template('en', 'owner-email-subject', function(add, order){
+  app.template('english', 'owner-email-subject', function(add, order){
     add('Order from ' + order.site + ' for ' + app.priceWithCurrency(order.price, order.currency))
   })
 
-  app.template('en', 'owner-email-text', function(add, order){
+  app.template('english', 'owner-email-text', function(add, order){
     add('Customer')
     add('')
     if(order.name)    add("  Name    " + order.name)

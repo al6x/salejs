@@ -41,8 +41,8 @@ var initialize = function(express, options){
   }
 
   // Translations.
-  require('./server/languages/en')(app)
-  require('./server/languages/ru')(app)
+  require('./server/languages/english')(app)
+  require('./server/languages/russian')(app)
 
   // Preparing email.
   var mailer = nodemailer.createTransport("sendmail")

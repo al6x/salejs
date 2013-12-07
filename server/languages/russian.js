@@ -1,9 +1,9 @@
 module.exports = function(app){
-  app.template('ru', 'owner-email-subject', function(add, order){
+  app.template('russian', 'owner-email-subject', function(add, order){
     add('Заказ с ' + order.site + ' на ' + app.priceWithCurrency(order.price, order.currency))
   })
 
-  app.template('ru', 'owner-email-text', function(add, order){
+  app.template('russian', 'owner-email-text', function(add, order){
     add('Заказчик')
     add('')
     if(order.name)    add("  Имя     " + order.name)
