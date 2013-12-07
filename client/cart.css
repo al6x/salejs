@@ -38,7 +38,10 @@
   float: right;
   line-height: 28px;
   margin-right: 3px;
-  color: #999;}
+  color: #999;
+  max-width: 41px;
+  overflow: hidden;
+  text-overflow: ellipsis;}
 
 .cart .cart-item-multiply-sign {
   font-size: 12px;

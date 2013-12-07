@@ -42,7 +42,7 @@
 
               <p>
                 <a href="#" class="pure-button primary-button cart-buy-button"
-                  data-name="Aliquam volutpat" data-price="10" data-quantity="1">Buy</a>
+                  data-name="Aliquam volutpat" data-price="10000" data-quantity="1">Buy</a>
               </p>
             </div>
           </div>
@@ -85,7 +85,9 @@
     <script>
       cartjs.initialize({
         baseUrl       : 'http://localhost:3000/v1',
-        emailOrdersTo : 'apetrushinpost@yandex.ru'
+        emailOrdersTo : 'apetrushinpost@yandex.ru',
+        language      : 'russian',
+        currency      : 'руб.'
       })
     </script>
 

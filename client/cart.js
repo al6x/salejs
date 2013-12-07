@@ -269,7 +269,7 @@
 
     // Options.
     this.baseUrl  = options.baseUrl  || 'http://salejs.com/v1'
-    this.language = options.language || 'en'
+    this.language = options.language || 'english'
     this.currency = options.currency || '$'
     this.requireName    = ('requireName' in options)    ? options.requireName    : true
     this.requirePhone   = ('requirePhone' in options)   ? options.requirePhone   : true
@@ -394,7 +394,7 @@
 
   app.priceWithCurrency = function(price){
     if(['$', '£'].indexOf(this.currency) >= 0) return app.currency + price
-    else return price + app.currency
+    else return price + ' ' + app.currency
   }
 
   // # Models.
@@ -714,7 +714,10 @@
       add('<input class="cart-item-quantity form-control" type="text" value="'
       + item.quantity + '" data-name="' + escapeHtml(item.name) + '">')
       add('<div class="cart-item-multiply-sign">&times;</div>')
-      add('<div class="cart-item-price">' + app.priceWithCurrency(item.price) + '</div>')
+      // If price with currency is too big showing price only.
+      var priceWithCurrency = app.priceWithCurrency(item.price)
+      if(priceWithCurrency.length > 5) priceWithCurrency = item.price
+      add('<div class="cart-item-price">' + priceWithCurrency + '</div>')
       add('<div class="cart-clearfix"></div>')
     add('</div>')
   })
