@@ -54,6 +54,9 @@ var initialize = function(express, options){
   // in future.
   app.use('/v1', express.static(__dirname + '/client', {maxAge: 31557600000}))
 
+  // Serving static documentation page.
+  app.use('/documentation', express.static(__dirname + '/documentation', {maxAge: 31557600000}))
+
   // Middleware for request parsing.
   app.use(express.json({limit: options.requestLimit}))
   app.use(express.urlencoded())
@@ -87,6 +90,12 @@ var initialize = function(express, options){
       else res.end('{}')
     })
   })
+
+  // Redirecting to documentation from site root.
+  app.get('/', function(req, res){
+    res.redirect('/documentation')
+  })
+
   return app
 }
 

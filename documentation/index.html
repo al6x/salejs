@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>salejs</title>
+  <link rel="stylesheet" type="text/css" media="all" href="/documentation/styles/style.css">
+</head>
+<body>
+  <div class="navigation">
+    <div class="navigation-inner">
+      <div class="navigation-left">
+        <a href="#docs">Documentation</a>
+        <a href="https://github.com/alexeypetrushin/salejs" target="_blank">Source</a>
+      </div>
+      <div class="navigation-right">
+        <a href="#" class="navigation-button cart-button" style="display: none;">
+          <span class="cart-button-quantity">0</span>
+          <span class="cart-button-label">items</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header with demo. -->
+  <div class="section darken">
+    <div class="section-inner">
+      <div class="products">
+        <div class="product">
+          <div class="product-image">
+            <img src="/documentation/images/iphone.png">
+          </div>
+          <a href="#" class="button cart-buy-button" data-name="iPhone" data-price="999" data-quantity="1">Buy $1200</a>
+        </div>
+        <div class="product">
+          <img src="/documentation/images/nexus.png">
+          <a href="#" class="button cart-buy-button" data-name="Nexus" data-price="450" data-quantity="1">Buy $450</a>
+        </div>
+      </div>
+      <div class="products-description">Cart Widget turns <br/>any Site into Shop</div>
+    </div>
+  </div>
+
+  <!-- Documentation. -->
+  <div class="section">
+    <div class="section-inner">
+
+    <p id="docs">1. Include sale.js in HTML page and configure it.</p>
+<pre><code class="prettyprint">
+&lt;script src="http://salejs.com/v1/cart.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  cartjs.initialize({
+    emailOrdersTo  : 'your-shop@mail.com',
+
+    // Optional configuration options.
+    language       : 'english', // 'russian' also available.
+    currency       : '$',
+    requireName    : true,      // Require name in contact form.
+    requirePhone   : true,      // Require phone in contact form.
+    requireEmail   : false,     // Require email in contact form.
+    requireAddress : false,     // Require address in contact form.
+  })
+&lt;/script&gt;
+</code></pre>
+
+    <p>2. Add Cart Button</p>
+<pre><code class="prettyprint">
+&lt;a href="#" class="cart-button" style="display: none;"&gt;
+  &lt;span class="cart-button-quantity"&gt;&lt;/span&gt;
+  &lt;span class="cart-button-label"&gt;&lt;/span&gt;
+  &lt;!-- Or put an image here instead of span elements with text. --&gt;
+&lt;/a&gt;
+</code></pre>
+
+    <p>3. Add Buy Buttons for Products</p>
+<pre><code class="prettyprint">
+&lt;a href="#" class="cart-buy-button"
+  data-name="Nexus"
+  data-price="450"
+  data-quantity="1"
+&gt;Buy $450&lt;/a&gt;
+</code></pre>
+
+    <p>or using JavaScript</p>
+<pre><code class="prettyprint">
+cartjs.add({
+  name     : "Nexus",
+  price    : 450,
+  quantity : 1
+})
+</code></pre>
+
+    <p>4. Optionally you can alter position of Cart Popup</p>
+<pre><code class="prettyprint">
+&lt;style&gt;
+  .bootstrap-widget .popover {margin-left: -10px !important;}
+  .bootstrap-widget .popover .arrow {margin-left: 10px !important;}
+&lt;/style&gt;
+</code></pre>
+
+    <p>Also, use this page as example<p>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <a href="http://jslang.info/projects/salejs">How it works</a>
+      </div>
+      <div class="footer-right">
+        By <a href="http://petrush.in">Alexey Petrushin</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="http://salejs.com/v1/cart.js"></script>
+  <style>
+    .bootstrap-widget .popover {margin-left: -88px !important;}
+    .bootstrap-widget .popover .arrow {margin-left: 77px !important;}
+  </style>
+  <script>
+    cartjs.initialize({
+      emailOrdersTo : 'dummy@mail.com'
+    })
+  </script>
+
+  <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+</body>
+</html>

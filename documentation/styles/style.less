@@ -1,0 +1,92 @@
+// Dependencies.
+@import './vendor/normalize-2.1.3.less';
+@import url('http://fonts.googleapis.com/css?family=Open+Sans:300italic,300,400italic,400,600italic,600,700italic,700,800italic,800&subset=latin,cyrillic,cyrillic-ext');
+
+// Helpers.
+.clearfix{*zoom: 1;
+  &:before, &:after{display: table; content: ""; line-height: 0;}
+  &:after{clear: both;}}
+*, *:before, *:after{box-sizing: border-box;}
+.nowrap{white-space: nowrap;}
+
+/*font-family: "Open Sans",Helvetica,Arial,sans-serif; font-weight: bold;*/
+body{font-family: "Open Sans",Helvetica,Arial,sans-serif; font-size: 16px;}
+
+// Variables and mixins.
+@width      : 1024px;
+@light-gray : hsl(0, 0%, 96%);
+@gray       : hsl(0, 0%, 66%);
+@dark-gray  : hsl(0, 0%, 33%);
+.inner{width: @width; margin-left: auto; margin-right: auto;}
+.no-link{text-decoration: none; color: inherit;}
+
+.darken{background-color: @light-gray;}
+.image-with-shadow{margin-left: -20px;}
+
+// Navigation and footer.
+.navigation{background-color: #fff; border-bottom: 1px solid @light-gray;
+  a{.no-link();}
+  p{display: inline-block; margin-top: 0; margin-bottom: 0;}
+  font-size: 14px;
+  line-height: 40px;
+  .navigation-button{color: #fff; background-color: @dark-gray;
+    border-radius: 3px; padding: 2px 12px;}
+  .navigation-left{float: left;
+    a{margin-right: 12px;}}
+  .navigation-right{float: right;}
+  .navigation-selected{background-color: @light-gray;
+    border-radius: 12px; padding: 2px 12px;}
+  .navigation-inner{.clearfix(); .inner();}}
+
+.footer{background-color: #fff;
+  font-size: 14px;
+  line-height: 40px;
+  .footer-left{float: left;
+    a{.no-link();}}
+  .footer-right{float: right;}
+  .footer-inner{.clearfix(); .inner();}}
+
+.footer{background-color: #fff;
+  .footer-inner{.clearfix(); .inner();
+    .footer-left{float: left;}
+    .footer-right{float: right;}}}
+
+// Section.
+.section{padding-top: 60px; padding-bottom: 60px;
+  border-bottom: 1px solid @light-gray;
+  font-size: 30px;
+  .section-inner{.clearfix(); .inner();}
+
+  .section-image-left{float: left; width: 40%;}
+  .section-text-right{float: right; width: 60%;}
+
+  .section-image-right{float: right; width: 40%;}
+  .section-text-left{float: left; width: 60%;}
+
+  .section-heading{font-size: 42px; line-height: 42px;
+    /*margin-top: -32px; margin-bottom: -32px;*/}
+
+  .section-image{text-align: center;}
+  .section-image-text{text-align: center;}
+  .section-image-text-small{text-align: center; color: gray;
+    font-size: 16px;
+    a{color: gray;}}}
+
+// Button.
+.button{.no-link(); color: #fff; background-color: @dark-gray;
+  border-radius: 3px; padding: 2px 12px; white-space: nowrap;}
+
+// Header with Products.
+.products{float: right; width: 40%;
+  .product{.clearfix(); float: right; margin-left: 1em; width: 150px;
+    text-align: center;
+    img{height: 250px;}
+    a{clear: both; font-size: 14px;}}}
+.products-description{float: left; width: 60%; font-size: 62px; line-height: 100px;
+  margin-top: -10px;}
+
+// Code.
+pre{font-size: 16px; margin-top: -24px;
+  font-family: Monaco, Menlo, Consolas, 'Courier New', monospace !important;
+  *{font-size: 16px;
+    font-family: Monaco, Menlo, Consolas, 'Courier New', monospace !important;}}
