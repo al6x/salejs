@@ -393,7 +393,8 @@
   }
 
   app.priceWithCurrency = function(price){
-    if(['$', '£'].indexOf(this.currency) >= 0) return app.currency + price
+    prefixed = ['$', '£', '€']
+    if(prefixed.indexOf(this.currency.toLowerCase()) >= 0) return app.currency + price
     else return price + ' ' + app.currency
   }
 
