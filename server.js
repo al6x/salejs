@@ -3,14 +3,19 @@ var app = express()
 var nodemailer = require("nodemailer")
 
 // Helpers.
-var p = console.log.bind(console)
+var p    = console.log.bind(console)
+var info = console.info.bind(console)
 
 // Parsing environment variables.
 var env = process.env
 var options = {}
 options.port         = parseInt(env.port || 3000)
-options.requestLimit = parseInt(options.requestLimit || 5 * 1024)
-options.email        = parseInt(options.email || 'robot@salejs.com')
+options.requestLimit = parseInt(env.requestLimit || 5 * 1024)
+options.smtpHost     = env.smtpHost || 'smtp.mailgun.org'
+options.smtpPort     = parseInt(env.smtpPort || 25)
+options.fromAddress  = env.fromAddress || 'robot@salejs.com'
+options.smtpUser     = env.smtpUser
+options.smtpPassword = env.smtpPassword
 
 // Templates, I don't want to use express templates because I want to keep
 // all the templates for each language in one file.
@@ -46,13 +51,24 @@ require('./server/languages/english')(app)
 require('./server/languages/russian')(app)
 
 // Preparing email.
-var mailer = nodemailer.createTransport("sendmail")
+var transporter = nodemailer.createTransport({
+    host : options.smtpHost,
+    port : options.smtpPort,
+    auth: {
+        user: options.smtpUser,
+        pass: options.smtpPassword
+    }
+})
 
 // Serving static files from `client` folder and telling browser
 // to cache it.
 //
 // Using version in path in order to provide backward compatibile API
 // in future.
+app.use('/v1', function(req, res, next){
+  if(/\/cart.js/.test(req.path)) info("serving " + req.get('Referer'))
+  next()
+})
 app.use('/v1', express.static(__dirname + '/client', {maxAge: 31557600000}))
 
 // Serving static documentation page.
@@ -68,7 +84,7 @@ app.post('/v1/orders', function(req, res){
   var order = JSON.parse(req.body.data)
 
   // Need this for logging.
-  console.log('salejs order from ' + order.site + ' for '
+  info('salejs order from ' + order.site + ' for '
   + app.priceWithCurrency(order.price, order.currency) + ' (' + req.body.data + ')')
 
   // Setting special headers to allow cross domain requsts.
@@ -77,14 +93,14 @@ app.post('/v1/orders', function(req, res){
   res.header('Access-Control-Allow-Headers', 'Content-Type')
 
   // Sending mail to shop owner.
-  mailer.sendMail({
-    from    : options.email,
+  transporter.sendMail({
+    from    : options.fromAddress,
     to      : order.emailOrdersTo,
     subject : app.render(order.language, 'owner-email-subject', order),
     text    : app.render(order.language, 'owner-email-text', order)
   }, function(err){
     if(err){
-      console.log("salejs can't send email to " + order.emailOrdersTo + ' because of '
+      info("salejs can't send email to " + order.emailOrdersTo + ' because of '
       + (err.message || err))
       res.end(500, '{}')
     }
@@ -99,10 +115,10 @@ app.get('/', function(req, res){
 
 // Starting server.
 app.listen(options.port)
-console.info("salejs server started on " + options.port + " port")
+info("salejs server started on " + options.port + " port")
 
 // Node.js sometimes leek memory, restarting the process periodically.
 setTimeout(function(){
-  console.info('restarting by timeout')
+  info('restarting by timeout')
   process.exit()
 }, 4 * 60 * 60 * 1000)
