@@ -66,13 +66,14 @@ var transporter = nodemailer.createTransport({
 // Using version in path in order to provide backward compatibile API
 // in future.
 app.use('/v1', function(req, res, next){
-  if(/\/cart.js/.test(req.path)) info("serving " + req.get('Referer'))
+  var referer = req.get('Referer')
+  if(referer && /\/cart.js/.test(req.path)) info("serving " + decodeURI(referer))
   next()
 })
 app.use('/v1', express.static(__dirname + '/client', {maxAge: 31557600000}))
 
-// Serving static documentation page.
-app.use('/documentation', express.static(__dirname + '/documentation', {maxAge: 31557600000}))
+// Serving site.
+app.use(express.static(__dirname + '/documentation', {maxAge: 31557600000}))
 
 // Middleware for request parsing.
 app.use(express.json({limit: options.requestLimit}))
@@ -106,11 +107,6 @@ app.post('/v1/orders', function(req, res){
     }
     else res.end('{}')
   })
-})
-
-// Redirecting to documentation from site root.
-app.get('/', function(req, res){
-  res.redirect('/documentation')
 })
 
 // Starting server.
