@@ -4,7 +4,17 @@ var nodemailer = require("nodemailer")
 
 // Helpers.
 var p    = console.log.bind(console)
-var info = console.info.bind(console)
+var info = function(msg){
+  var withZero = function(number){return (number < 10) ? ('0' + number) : number}
+  var timestamp = function(){
+    date = new Date()
+    return date.getFullYear() + '/' + withZero(date.getMonth() + 1) + '/' +
+      withZero(date.getDate()) + ' ' +
+      withZero(date.getHours()) + ':' + withZero(date.getMinutes()) + ':' +
+      withZero(date.getSeconds())
+  }
+  console.info('  ', timestamp(), msg.toString().substring(0, 1000))
+}
 
 // Parsing environment variables.
 var env = process.env
@@ -85,7 +95,7 @@ app.post('/v1/orders', function(req, res){
   var order = JSON.parse(req.body.data)
 
   // Need this for logging.
-  info('salejs order from ' + order.site + ' for '
+  info('order from ' + order.site + ' for '
   + app.priceWithCurrency(order.price, order.currency) + ' (' + req.body.data + ')')
 
   // Setting special headers to allow cross domain requsts.
@@ -101,7 +111,7 @@ app.post('/v1/orders', function(req, res){
     text    : app.render(order.language, 'owner-email-text', order)
   }, function(err){
     if(err){
-      info("salejs can't send email to " + order.emailOrdersTo + ' because of '
+      info("can't send email to " + order.emailOrdersTo + ' because of '
       + (err.message || err))
       res.end(500, '{}')
     }
@@ -111,7 +121,7 @@ app.post('/v1/orders', function(req, res){
 
 // Starting server.
 app.listen(options.port)
-info("salejs server started on " + options.port + " port")
+info("server started on " + options.port + " port")
 
 // Node.js sometimes leek memory, restarting the process periodically.
 setTimeout(function(){
