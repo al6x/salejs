@@ -262,6 +262,7 @@
   }
 
   // Initialization.
+  app.languageShortcuts = {en: 'english', ru: 'russian'}
   app.initialize = function(options, callback){
     // Parsing arguments.
     options = options || {}
@@ -270,6 +271,7 @@
     // Options.
     this.baseUrl  = options.baseUrl  || 'http://salejs.com/v1'
     this.language = options.language || 'english'
+    this.language = app.languageShortcuts[this.language] || this.language
     this.currency = options.currency || '$'
     this.requireName    = ('requireName' in options)    ? options.requireName    : true
     this.requirePhone   = ('requirePhone' in options)   ? options.requirePhone   : true
