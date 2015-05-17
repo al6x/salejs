@@ -262,7 +262,7 @@
   }
 
   // Initialization.
-  app.languageShortcuts = {en: 'english', ru: 'russian'}
+  app.languageShortcuts = {en: 'english', ru: 'russian', ua: 'ukrainian'}
   app.initialize = function(options, callback){
     // Parsing arguments.
     options = options || {}
