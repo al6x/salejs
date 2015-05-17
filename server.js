@@ -59,7 +59,7 @@ app.priceWithCurrency = function(price, currency){
 // Translations.
 require('./server/languages/english')(app)
 require('./server/languages/russian')(app)
-require('./server/languages/ukraini')(app)
+require('./server/languages/ukrainian')(app)
 
 // Preparing email.
 var transporter = nodemailer.createTransport({

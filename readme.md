@@ -70,4 +70,8 @@ lessc bootstrap-widget.less > bootstrap-widget.css
 You should get file `bootstrap-widget.css` with all bootstrap styles put under
 the `bootstrap-widget` namespace.
 
+# Contributors
+
+- Arthur Kohansky
+
 Copyright (c) Alexey Petrushin, http://petrush.in, released under the MIT license.
