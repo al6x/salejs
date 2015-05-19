@@ -1,19 +1,18 @@
-// TODO not translated yet.
 module.exports = function(app){
   app.template('russian', 'owner-email-subject', function(add, order){
-    add('Заказ с ' + order.site + ' на ' + app.priceWithCurrency(order.price, order.currency))
+    add('Замовлення з ' + order.site + ' на ' + app.priceWithCurrency(order.price, order.currency))
   })
 
   app.template('russian', 'owner-email-text', function(add, order){
-    add('Заказчик')
+    add('Замовник')
     add('')
-    if(order.name)    add("  Имя     " + order.name)
-    if(order.phone)   add("  Телефон " + order.phone)
-    if(order.email)   add("  Почта   " + order.email)
-    if(order.address) add("  Адрес   " + order.address)
+    if(order.name)    add("  Ім'я:     " + order.name)
+    if(order.phone)   add("  Телефон: " + order.phone)
+    if(order.email)   add("  Пошта:   " + order.email)
+    if(order.address) add("  Адреса:   " + order.address)
     add('')
 
-    add('Заказал')
+    add('Замовив')
     add('')
     for(var i = 0; i < order.items.length; i++){
       var item = order.items[i]
@@ -21,6 +20,6 @@ module.exports = function(app){
       + app.priceWithCurrency(item.price, order.currency))
     }
     add('')
-    add('На сумму ' + app.priceWithCurrency(order.price, order.currency))
+    add('На суму ' + app.priceWithCurrency(order.price, order.currency))
   })
 }
