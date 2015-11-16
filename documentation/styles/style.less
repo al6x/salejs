@@ -27,6 +27,8 @@ body{font-family: "Open Sans",Helvetica,Arial,sans-serif; font-size: 16px;}
 .navigation{background-color: #fff; border-bottom: 1px solid @light-gray;
   a{.no-link();}
   p{display: inline-block; margin-top: 0; margin-bottom: 0;}
+  .selected {background: @dark-gray; padding-left: 12px; padding-right: 12px;
+    margin-left: 5px; margin-right: 5px; color: white; }
   font-size: 14px;
   line-height: 40px;
   .navigation-button{color: #fff; background-color: @dark-gray;
@@ -71,6 +73,17 @@ body{font-family: "Open Sans",Helvetica,Arial,sans-serif; font-size: 16px;}
   .section-image-text-small{text-align: center; color: gray;
     font-size: 16px;
     a{color: gray;}}}
+
+// Alert.
+.alert {
+  font-size: 16px;
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border: 2px solid #8a6d3b;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
 
 // Button.
 .button{.no-link(); color: #fff; background-color: @dark-gray;

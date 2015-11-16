@@ -10,18 +10,18 @@
   <div class="navigation">
     <div class="navigation-inner">
       <div class="navigation-left">
-        <a href="ru.html">RU</a>
-        <p class="selected">EN</p>
+        <p class="selected">RU</p>
+        <a href="/">EN</a>
         &nbsp;
         &nbsp;
-        <a href="#docs">Documentation</a>
-        <a href="https://github.com/alexeypetrushin/salejs" target="_blank">Source</a>
-        <a href="mailto:alexey.petrushin@gmail.com" target="_blank">Contact me</a>
+        <a href="#docs">Документация</a>
+        <a href="https://github.com/alexeypetrushin/salejs" target="_blank">Исходники</a>
+        <a href="mailto:alexey.petrushin@gmail.com" target="_blank">Обратная связь</a>
       </div>
       <div class="navigation-right">
         <a href="#" class="navigation-button cart-button" style="display: none;">
           <span class="cart-button-quantity">0</span>
-          <span class="cart-button-label">items</span>
+          <span class="cart-button-label">товаров</span>
         </a>
       </div>
     </div>
@@ -35,14 +35,18 @@
           <div class="product-image">
             <img src="/images/iphone.png">
           </div>
-          <a href="#" class="button cart-buy-button" data-name="iPhone" data-price="999" data-quantity="1">Buy $1200</a>
+          <a href="#" class="button cart-buy-button" data-name="iPhone" data-price="999" data-quantity="1">Купить 34 000 руб.</a>
         </div>
         <div class="product">
           <img src="/images/nexus.png">
-          <a href="#" class="button cart-buy-button" data-name="Nexus" data-price="450" data-quantity="1">Buy $450</a>
+          <a href="#" class="button cart-buy-button" data-name="Nexus" data-price="450" data-quantity="1">Купить 18 000 руб.</a>
         </div>
       </div>
-      <div class="products-description">Cart Widget turns <br/>any Site into Shop</div>
+      <div class="products-description">
+        Виджет Корзины<br/>
+        превращает любой<br/>
+        Сайт в Магазин
+      </div>
     </div>
   </div>
 
@@ -68,34 +72,34 @@
         </table>
       </div> -->
 
-      <p id="docs">1. Include sale.js in HTML page and configure it</p>
+      <p id="docs">1. Добавьте sale.js в HTML страницы и проставьте нужные опции</p>
 <pre><code class="prettyprint">
 &lt;script src="http://salejs.com/v1/cart.js"&gt;&lt;/script&gt;
 &lt;script&gt;
   cartjs.initialize({
     emailOrdersTo  : 'your-shop@mail.com',
+    language       : 'russian', // Также доступны 'english' и 'ukrainian'.
+    currency       : 'руб.',
 
-    // Optional configuration options.
-    language       : 'english', // 'russian' and 'ukrainian' also available.
-    currency       : '$',
-    requireName    : true,      // Require name in contact form.
-    requirePhone   : true,      // Require phone in contact form.
-    requireEmail   : false,     // Require email in contact form.
-    requireAddress : false,     // Require address in contact form.
+    // Дополнительные опции, можно их не указывать.
+    requireName    : true,      // Спрашивать имя покупателя.
+    requirePhone   : true,      // Спрашивать телефон покупателя.
+    requireEmail   : false,     // Спрашивать почту покупателя.
+    requireAddress : false,     // Спрашивать адрес покупателя.
   })
 &lt;/script&gt;
 </code></pre>
 
-    <p>2. Add Cart Button</p>
+    <p>2. Добавьте кнопку Корзины на ваш сайт</p>
 <pre><code class="prettyprint">
 &lt;a href="#" class="cart-button" style="display: none;"&gt;
   &lt;span class="cart-button-quantity"&gt;&lt;/span&gt;
   &lt;span class="cart-button-label"&gt;&lt;/span&gt;
-  &lt;!-- Or put an image here instead of span elements with text. --&gt;
+  &lt;!-- Опционально, вместо span элементов можно поместить сюда картинку для кнопки. --&gt;
 &lt;/a&gt;
 </code></pre>
 
-    <p>3. Add Buy Buttons for Products</p>
+    <p>3. Добавьте кнопку "Купить" для продуктов</p>
 <pre><code class="prettyprint">
 &lt;a href="#" class="cart-buy-button"
   data-name="Nexus"
@@ -104,7 +108,7 @@
 &gt;Buy $450&lt;/a&gt;
 </code></pre>
 
-    <p>or using JavaScript</p>
+    <p>или, опционально это можно сделать JavaScript'ом:</p>
 <pre><code class="prettyprint">
 cartjs.add({
   name     : "Nexus",
@@ -113,7 +117,7 @@ cartjs.add({
 })
 </code></pre>
 
-    <p>4. Optionally you can alter position of Cart Popup</p>
+    <p>4. Можно поменять положение всплывающего окна корзины</p>
 <pre><code class="prettyprint">
 &lt;style&gt;
   .bootstrap-widget .popover {margin-left: -10px !important;}
@@ -121,7 +125,7 @@ cartjs.add({
 &lt;/style&gt;
 </code></pre>
 
-    <p>Also, use this page as example - click "Buy"<p>
+    <p>И, используйте эту страницу как пример - нажмите "купить"<p>
 
     </div>
   </div>
@@ -129,10 +133,10 @@ cartjs.add({
   <div class="footer">
     <div class="footer-inner">
       <div class="footer-left">
-        <a href="http://jslang.info/projects/salejs">How it works</a>
+        <a href="http://jslang.info/projects/salejs">Как это работает</a>
       </div>
       <div class="footer-right">
-        By <a href="http://alex-craft.com">Alex Craft</a>
+        Сделано <a href="http://alex-craft.com">Alex Craft</a>
       </div>
     </div>
   </div>
@@ -154,7 +158,9 @@ cartjs.add({
   </style>
   <script>
     cartjs.initialize({
-      emailOrdersTo : 'dummy@mail.com'
+      emailOrdersTo : 'dummy@mail.com',
+      language       : 'russian',
+      currency       : 'руб.'
     })
   </script>
 

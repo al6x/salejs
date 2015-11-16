@@ -1,4 +1,3 @@
-@import url('http://fonts.googleapis.com/css?family=Open+Sans:300italic,300,400italic,400,600italic,600,700italic,700,800italic,800&subset=latin,cyrillic,cyrillic-ext');
 /*! normalize.css v2.1.3 | MIT License | git.io/normalize */
 /* ==========================================================================
    HTML5 display definitions
@@ -6,6 +5,7 @@
 /**
  * Correct `block` display not defined in IE 8/9.
  */
+@import url('http://fonts.googleapis.com/css?family=Open+Sans:300italic,300,400italic,400,600italic,600,700italic,700,800italic,800&subset=latin,cyrillic,cyrillic-ext');
 article,
 aside,
 details,
@@ -394,6 +394,14 @@ body {
   margin-top: 0;
   margin-bottom: 0;
 }
+.navigation .selected {
+  background: #545454;
+  padding-left: 12px;
+  padding-right: 12px;
+  margin-left: 5px;
+  margin-right: 5px;
+  color: white;
+}
 .navigation .navigation-button {
   color: #fff;
   background-color: #545454;
@@ -539,6 +547,15 @@ body {
 .section .section-image-text-small a {
   color: gray;
 }
+.alert {
+  font-size: 16px;
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border: 2px solid #8a6d3b;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
 .button {
   text-decoration: none;
   color: inherit;
@@ -590,14 +607,4 @@ pre {
 pre * {
   font-size: 16px;
   font-family: Monaco, Menlo, Consolas, 'Courier New', monospace !important;
-}
-
-.alert {
-  font-size: 16px;
-  color: #8a6d3b;
-  background-color: #fcf8e3;
-  border: 2px solid #8a6d3b;
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 8px;
 }
