@@ -29,7 +29,6 @@ options.smtpUser     = env.smtpUser
 options.smtpPassword = env.smtpPassword
 
 // Compression.
-
 app.use(compression)
 
 // Templates, I don't want to use express templates because I want to keep
@@ -68,12 +67,12 @@ require('./server/languages/ukrainian')(app)
 
 // Preparing email.
 var transporter = nodemailer.createTransport({
-    host : options.smtpHost,
-    port : options.smtpPort,
-    auth: {
-        user: options.smtpUser,
-        pass: options.smtpPassword
-    }
+  host : options.smtpHost,
+  port : options.smtpPort,
+  auth: {
+    user: options.smtpUser,
+    pass: options.smtpPassword
+  }
 })
 
 // Serving static files from `client` folder and telling browser
