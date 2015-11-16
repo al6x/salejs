@@ -1,17 +1,23 @@
 {
-  "name"         : "salejs",
-  "main"         : "./server.js",
-  "version"      : "1.2.4",
-  "homepage"     : "https://github.com/alexeypetrushin/salejs",
-  "description"  : "Cart Widget turning any Site into Shop",
-  "keywords"     : ["Cart", "eCommerce", "Sales", "Store"],
-  "author"       : {
-    "name" : "Alexey Petrushin",
-    "url"  : "http://petrush.in"
+  "name": "salejs",
+  "main": "./server.js",
+  "version": "1.2.4",
+  "homepage": "https://github.com/alexeypetrushin/salejs",
+  "description": "Cart Widget turning any Site into Shop",
+  "keywords": [
+    "Cart",
+    "eCommerce",
+    "Sales",
+    "Store"
+  ],
+  "author": {
+    "name": "Alexey Petrushin",
+    "url": "http://petrush.in"
   },
-  "dependencies" : {
-    "express" : "3.4.x",
-    "nodemailer" : "1.2.x"
+  "dependencies": {
+    "compression": "1.6.0",
+    "express": "3.4.x",
+    "nodemailer": "1.2.x"
   },
-  "license"      : "MIT"
+  "license": "MIT"
 }

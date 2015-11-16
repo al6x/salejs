@@ -1,6 +1,7 @@
 var express = require('express')
 var app = express()
 var nodemailer = require("nodemailer")
+var compression = require('compression')()
 
 // Helpers.
 var p    = console.log.bind(console)
@@ -26,6 +27,10 @@ options.smtpPort     = parseInt(env.smtpPort || 25)
 options.fromAddress  = env.fromAddress || 'robot@salejs.com'
 options.smtpUser     = env.smtpUser
 options.smtpPassword = env.smtpPassword
+
+// Compression.
+
+app.use(compression)
 
 // Templates, I don't want to use express templates because I want to keep
 // all the templates for each language in one file.
