@@ -72,7 +72,7 @@ the `bootstrap-widget` namespace.
 
 # Interesting projects
 
-- Similar https://saleor.io
+- Similar https://saleor.io opencart
 
 # Contributors
 
